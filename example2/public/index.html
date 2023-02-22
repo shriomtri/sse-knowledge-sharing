@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Server-Sent Events Example</title>
+  </head>
+  <body>
+    <h1>Stock Market Ticker</h1>
+    <div id="ticker"></div>
+    <script>
+      const ticker = document.getElementById('ticker');
+
+      // Replace "http://localhost:3000/ticker/AAPL" with the SSE endpoint URL for the desired stock symbol.
+      const source = new EventSource('http://localhost:3000/ticker');
+
+      source.addEventListener('message', (event) => {
+        const price = event.data;
+        const p = document.createElement('p');
+        p.innerText = `${price}`;
+        ticker.appendChild(p);
+      });
+
+      source.onerror = (event) => {
+        console.error('SSE error:', event);
+        source.close();
+      };
+    </script>
+  </body>
+</html>

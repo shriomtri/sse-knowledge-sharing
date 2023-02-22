@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Stock Ticker</title>
+</head>
+<body>
+  <h1>Stock Ticker</h1>
+  <div>
+    <h2>AAPL: <span id="AAPL-price"></span></h2>
+  </div>
+  <div>
+    <h2>MSFT: <span id="MSFT-price"></span></h2>
+  </div>
+  <div>
+    <h2>GOOG: <span id="GOOG-price"></span></h2>
+  </div>
+  <script>
+    const AAPLPrice = document.getElementById('AAPL-price');
+    const MSFTPrice = document.getElementById('MSFT-price');
+    const GOOGPrice = document.getElementById('GOOG-price');
+
+    function handlePriceEvent(symbol, price) {
+      if (symbol === 'AAPL') {
+        AAPLPrice.innerText = price;
+      } else if (symbol === 'MSFT') {
+        MSFTPrice.innerText = price;
+      } else if (symbol === 'GOOG') {
+        GOOGPrice.innerText = price;
+      }
+    }
+
+    function subscribeToTicker(symbol) {
+      const evtSource = new EventSource(`/ticker/${symbol}`);
+      evtSource.addEventListener('message', (evt) => {
+        handlePriceEvent(symbol, evt.data);
+      });
+    }
+
+    subscribeToTicker('AAPL');
+    subscribeToTicker('MSFT');
+    subscribeToTicker('GOOG');
+  </script>
+</body>
+</html>
